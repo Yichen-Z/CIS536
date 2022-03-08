@@ -16,6 +16,7 @@ To run the script file checkpoint_01.py:
     2) Script directory:
         a) Create another directory, either nested within or independent of the directory above
         b) Move the .py script to this directory
+            Or fork from https://github.com/Yichen-Z/CIS536
         c) Open this directory with IDE
             If using Visual Studio Code or another IDE that does not auto-create virtual env:
                 Terminal:
