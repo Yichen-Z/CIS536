@@ -9,7 +9,7 @@ To run the script file checkpoint_01.py:
         PyCharm: https://www.jetbrains.com/pycharm/
     
     1) HOME & FILE paths:
-        a) Create a directory. Place the Wikipedia text file you wish to use in it.
+        a) Create a directory. Place the Wikipedia text files you wish to use in it.
         b) Update HOME variable on line 28 to this directory's path.
         c) Update the string in FILE on line 29 to the name of the text file
     
@@ -55,3 +55,22 @@ To run the script file checkpoint_01.py:
             Line 179: lemmatize_file()
             Line 184: make_corpus_dictionary()
             Line 185: build_unigram()
+
+Checkpoint 2 Scope
+- Multiple txt files
+- 
+
+Outputs
+- dictionary.txt
+    list of all stemmed words, one per line
+    alphabetical
+    word-code starts with 0
+- one local inverted index per chunk in the dataset
+    ignore stop words identified in checkpoint 1
+    word-code word doc-freq (doc-id, tf) (doc-id, tf) ...
+    in ascending word-code order
+    submit only 2 of these
+- any other stats that would be useful for search engine
+    document lengths
+    corpus document count
+- this readme
