@@ -22,7 +22,6 @@ Last updated: 4/14/2022
 """
 
 # Imports
-from functools import partial
 import csv
 import os
 import pandas as pd
@@ -31,59 +30,44 @@ import spacy
 import time
 
 # Variables
-HOME = r'D:\cis_536\outputs' # Change to corpus directory
+OUTPUTS = r'C:\Users\house\workspace\CIS_536_TextMining\outputs' # Change to where the indices will be written
+inputs = [r'D:\cis_536\wikidata\wikidata.000039', r'D:\cis_536\wikidata\wikidata.000009']
 
 DICTIONARY_OUTPUT = 'dictionary2.txt'
 UNIGRAM_BASE = 'unigrams2_'
-CHUNK_SIZE = 104857600 # 100 MB
-chunk_count = 0 # Combine this with UNIGRAM_BASE to name local inverted indices
-ii_file = f'{UNIGRAM_BASE}{chunk_count}.txt' # update, reuse
 
 # Took out "#lt.+#gt" from Checkpoint_1 since the tags do not appear in the new files
 # Took out "[0-9]+[a-z]+", "[0-9]" to keep the numbers in the text
-REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"'[a-z]+", r"[^\s\w]", "_", r"[ \t]{2,}"]
+REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"'[a-z]+", r"[^\s\w]", "_"]
+pattern = re.compile(r"(" + '|'.join(REMOVE_REGEX) + r")")
+spaces = re.compile(r"[ \t]{2,}")
 DOC_ID_REGEX = r'curid=(\d+)'
-
 STOP_WORDS = set(['be', 'the', 'of', 'a', 'in', 'and', 'to', 'as', 'for', 'from', 'on', 'have', 'it', 'with', 'by', 'one', 'he', 'at', 'an', 'during', 'who', 'his', 'also', 'that', 'this', 'which', 'after', 'between', 'its', 'their', 'but', 'until', 'or', 'into', 'over', 'then', 'up'])
-
-prev = ''
 
 start = time.time()
 end = time.time()
 
-vocab = set()
+vocab = {}
 v = {} # placeholder dictionary
 d = '' # placeholder string
+raw_list = []
+chunk_index = {}
 
 nlp = spacy.load('en_core_web_sm')
 
 # File input
-# Read in chunks of 100 MB
-def read_chunks(file, c = CHUNK_SIZE):
-    """
-    uses file.read() to read in text in chunks of size CHUNK_SIZE, set here to be 100 MB
-    and process the documents in each line
-    :param file: string for file path
-    :param c: int for size of chunk to read
-    :return:
-    """
-    with open(file, 'r', encoding='utf-8') as f:
-        rfile = partial(f.read, c)
-        for text in iter(rfile, ''): # stop when the file ends
-            if not text.endswith('\n'): # catching part of the last line that we can read
-                prev = text
-            else:
-                if prev != '': # there's a lingering partial line
-                    text = prev + text
-                    prev = ''
-                # this is a complete line and can be processed as usual
-                process(text)
-
-# Directory navigation
-# In the indicated folder
-# Loop through each of the files
+def do_everything():
+    for f in inputs: # each file to process
+        reduce_list(read_file(f))
 
 # Map
+def read_file(fpath):
+    raw_list = []
+    with open(fpath, 'r', encoding='utf-8') as f:
+        for line in f: # each line is a document > get back dict of terms and single-doc counts > want compile by term
+            raw_list.append(process(line))
+    return raw_list
+
 def process(words):
     """
     :param words: String - a line of text
@@ -110,7 +94,7 @@ def map_text(docID, doc):
     v = {} # reset placeholder dict
     for word in doc.split():
         if word not in vocab:
-            vocab.add(word)
+            vocab[word] = 1 # placeholder for termID for now
         if word not in STOP_WORDS:
             if word not in v:
                 v[word] = {docID: 1}
@@ -121,16 +105,18 @@ def map_text(docID, doc):
 def clean(words):
     return lemmatize(replace_regex(words)) # spaCy lemmatizer also takes care of lowercasing when it makes sense
 
-def replace_regex(text, l = REMOVE_REGEX, r = ' '):
+def replace_regex(text, r = ' '):
     """
     :param text: String
     :param l: list of regex for replacing (note that last has to replace multiple consecutive spaces)
     :param r: replace with one space
     :return: String all replaced
     """
-    for find in REMOVE_REGEX:
-        text = re.sub(find, r, text)
-    return text
+    # for find in REMOVE_REGEX: # this is really slow
+    #     find = re.compile(find)
+    print('Starting regex replace')
+    text = pattern.sub(r, text)
+    return spaces.sub(r, text)
 
 def lemmatize(text):
     """
@@ -138,20 +124,36 @@ def lemmatize(text):
     :param text: String
     :return: String lemmatized (and lowercase where appropriate)
     """
-    doc = nlp(text)
+    l_text = ''
     with nlp.select_pipes(disable=['parser','ner']):
-        l_text = ' '.join([token.lemma_ for token in doc])
+        docs = list(nlp.pipe(text))
+        for doc in docs:
+            l_text += ' '.join([token.lemma_ for token in doc])
     return l_text
 
 # Reduce
+def reduce_list(postings):
+    chunk_index = {}
+    for post in postings:
+        for word in post:
+            if word not in chunk_index.keys():
+                chunk_index[word] = []
+            chunk_index[word].append(post[word])
 
 # Write to file
+def write_vocab(fpath = DICTIONARY_OUTPUT):
+    ti = 0
+    with open(fpath, 'w') as out_file:
+        for word in list(vocab.keys()).sort():
+            vocab[word] = ti
+            ti += 1
+            out_file.write(f"{str(vocab[word])} {word}")
 
 
 def write_index(raw_index, wfile, vocab):
     """
     Writes the "localized" inverted indices to file (here .txt)
-    :param raw_dictionary: dict 'term': {{doc-id: tf} ...}
+    :param raw_index: dict 'term': {{doc-id: tf} ...}
     :param wfile: String filepath for file to write to
     :param vocab: dict 'term': 'term-id'
     :return: None

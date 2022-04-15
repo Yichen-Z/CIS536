@@ -79,3 +79,25 @@ Observations:
     Running read_chunks() on one of the files without any processing of the text:
         Lemmatization time:  3.898629903793335
         Testing read_chunks takes 0.781052827835083 sec
+        However, ultimately this seems to hang the regex and lemmatizer
+        # Read in chunks of 100 MB - slow/hanging
+        # def read_chunks(file, c = CHUNK_SIZE):
+        #     """
+        #     uses file.read() to read in text in chunks of size CHUNK_SIZE, set here to be 100 MB
+        #     and process the documents in each line
+        #     :param file: string for file path
+        #     :param c: int for size of chunk to read
+        #     :return:
+        #     """
+        #     with open(file, 'r', encoding='utf-8') as f:
+        #         rfile = partial(f.read, c)
+        #         for text in iter(rfile, ''): # stop when the file ends
+        #             if not text.endswith('\n'): # catching part of the last line that we can read
+        #                 prev = text
+        #             else:
+        #                 if prev != '': # there's a lingering partial line
+        #                     text = prev + text
+        #                     prev = ''
+        #                 # this is a complete line and can be processed as usual
+        #                 print(process(text))
+    Changed to reading line by line instead with read_file

@@ -1,10 +1,13 @@
 import checkpoint_02 as c
 import time
 
-# Test chunk reading
+file = r'D:\cis_536\wikidata\wikidata.000039'
+
+# # Test chunk reading - hangs with spaCy
 # start = time.time()
-# read_chunks(r'D:\cis_536\wikidata\wikidata.000039')
+# c.read_chunks(r'D:\cis_536\wikidata\wikidata.000039')
 # end = time.time()
+# print(c.vocab)
 # print(f'Testing read_chunks takes {end - start} sec')
 
 # # test map_text
@@ -18,7 +21,7 @@ import time
 # print(c.get_docID(w))
 
 # # test replace_regex
-w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the wonders are The Wonders'
+# w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the wonders are The Wonders'
 # print(c.replace_regex(w))
 
 # # test clean()
@@ -30,7 +33,7 @@ w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the w
 # test everything so far
 start = time.time()
 print(c.vocab)
-print(c.process(w))
+c.read_file(file)
 print(c.vocab)
 end = time.time()
 print(f'Cleaning and ignoring stop words takes {end - start} sec')
