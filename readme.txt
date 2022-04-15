@@ -74,3 +74,8 @@ Outputs
     document lengths
     corpus document count
 - this readme
+
+Observations:
+    Running read_chunks() on one of the files without any processing of the text:
+        Lemmatization time:  3.898629903793335
+        Testing read_chunks takes 0.781052827835083 sec
