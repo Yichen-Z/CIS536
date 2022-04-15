@@ -11,3 +11,7 @@ i = '1403'
 w = 'sunshine grace world today today sunshine sunshine'
 print(c.map_text(i,w))
 # output: {'sunshine': {'1403': 3}, 'grace': {'1403': 1}, 'world': {'1403': 1}, 'today': {'1403': 2}}
+
+# test get_docID
+w = 'dlafalsdkjfcurid=133 the world is great'
+print(c.get_docID(w))

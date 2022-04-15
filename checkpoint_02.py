@@ -40,8 +40,8 @@ ii_file = f'{UNIGRAM_BASE}{chunk_count}.txt' # update, reuse
 
 # Took out "#lt.+#gt" from Checkpoint_1 since the tags do not appear in the new files
 # Took out "[0-9]+[a-z]+", "[0-9]" to keep the numbers in the text
-REMOVE_REGEX = ["https:\/\/[^\s]+\s", "'[a-z]+", "[^\s\w]", "_", "[ \t]{2,}"]
-DOC_ID_REGEX = "curid=[\d]+"
+REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"'[a-z]+", r"[^\s\w]", "_", r"[ \t]{2,}"]
+DOC_ID_REGEX = r'curid=(\d+)'
 
 STOP_WORDS = ['be', 'the', 'of', 'a', 'in', 'and', 'to', 'as', 'for', 'from', 'on', 'have', 'it', 'with', 'by', 'one', 'he', 'at', 'an', 'during', 'who', 'his', 'also', 'that', 'this', 'which', 'after', 'between', 'its', 'their', 'but', 'until', 'or', 'into', 'over', 'then', 'up']
 
@@ -80,12 +80,21 @@ def read_chunks(file, c = CHUNK_SIZE):
 # Loop through each of the files
 
 # Map
-# def process(words):
-#     """
-#     :param words: String of text
-#     :return:
-#     """
-#     return None
+def process(words):
+    """
+    :param words: String - a line of text
+    :return:
+    """
+    get_docID(words)
+
+def get_docID(t):
+    """
+    :param t: String text through which to search with DOC_ID_REGEX
+    :return: String docID
+    """
+    result = re.search(DOC_ID_REGEX, t)
+    return result.group(1)
+    # return re.sub(DOC_ID_REGEX, '', result.group(1))
 
 def map_text(docID, doc):
     """
