@@ -27,6 +27,7 @@ import csv
 import os
 import pandas as pd
 import re
+import spacy
 import time
 
 # Variables
@@ -52,6 +53,9 @@ end = time.time()
 
 vocab = {}
 v = {} # placeholder dictionary
+d = '' # placeholder string
+
+nlp = spacy.load('en_core_web_sm')
 
 # File input
 # Read in chunks of 100 MB
@@ -73,7 +77,7 @@ def read_chunks(file, c = CHUNK_SIZE):
                     text = prev + text
                     prev = ''
                 # this is a complete line and can be processed as usual
-                # process(text)
+                process(text)
 
 # Directory navigation
 # In the indicated folder
@@ -85,7 +89,8 @@ def process(words):
     :param words: String - a line of text
     :return:
     """
-    get_docID(words)
+    d = get_docID(words)
+    clean(words)
 
 def get_docID(t):
     """
@@ -94,7 +99,6 @@ def get_docID(t):
     """
     result = re.search(DOC_ID_REGEX, t)
     return result.group(1)
-    # return re.sub(DOC_ID_REGEX, '', result.group(1))
 
 def map_text(docID, doc):
     """
@@ -110,8 +114,20 @@ def map_text(docID, doc):
             v[word][docID] += 1
     return v
 
-# Extract the doc-id (toss the curid=)
-# remove anything unwanted
+def clean(words):
+    return lemmatize(replace_regex(words)) # spaCy lemmatizer also takes care of lowercasing when it makes sense
+
+def replace_regex(text, l = REMOVE_REGEX, r = ' '):
+    for find in REMOVE_REGEX:
+        text = re.sub(find, r, text)
+    return text
+
+def lemmatize(text):
+    doc = nlp(text)
+    with nlp.select_pipes(disable=['parser','ner']):
+        l_text = ' '.join([token.lemma_ for token in doc])
+    return l_text
+
 # lowercase, then lemmatize each word
 # check if word is already in vocab
 # ignore if stop word
