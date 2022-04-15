@@ -139,6 +139,7 @@ def reduce_list(postings):
             if word not in chunk_index.keys():
                 chunk_index[word] = []
             chunk_index[word].append(post[word])
+    return chunk_index
 
 # Write to file
 def write_vocab(fpath = DICTIONARY_OUTPUT):
@@ -150,7 +151,7 @@ def write_vocab(fpath = DICTIONARY_OUTPUT):
             out_file.write(f"{str(vocab[word])} {word}")
 
 
-def write_index(raw_index, wfile, vocab):
+def write_index(raw_index, wfile, v = vocab):
     """
     Writes the "localized" inverted indices to file (here .txt)
     :param raw_index: dict 'term': {{doc-id: tf} ...}

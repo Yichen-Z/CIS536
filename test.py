@@ -1,7 +1,9 @@
 import checkpoint_02 as c
+import os
 import time
 
-file = r'D:\cis_536\wikidata\wikidata.000039'
+big_files = [r'D:\cis_536\wikidata\wikidata.000039', r'D:\cis_536\wikidata\wikidata.000009']
+small_files = r'D:\cis_536\wikidata_small'
 
 # # Test chunk reading - hangs with spaCy
 # start = time.time()
@@ -31,6 +33,9 @@ file = r'D:\cis_536\wikidata\wikidata.000039'
 # print(f'cleaning text done in {end - start}')
 
 # test everything so far
+def end_to_end():
+    for file in os.listdir(small_files):
+
 start = time.time()
 print(c.vocab)
 c.read_file(file)
