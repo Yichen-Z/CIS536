@@ -21,8 +21,16 @@ import time
 w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the wonders are The Wonders'
 # print(c.replace_regex(w))
 
-# test clean()
+# # test clean()
+# start = time.time()
+# print(c.clean(w))
+# end = time.time()
+# print(f'cleaning text done in {end - start}')
+
+# test everything so far
 start = time.time()
-print(c.clean(w))
+print(c.vocab)
+print(c.process(w))
+print(c.vocab)
 end = time.time()
-print(f'cleaning text done in {end - start}')
+print(f'Cleaning and ignoring stop words takes {end - start} sec')

@@ -44,14 +44,14 @@ ii_file = f'{UNIGRAM_BASE}{chunk_count}.txt' # update, reuse
 REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"'[a-z]+", r"[^\s\w]", "_", r"[ \t]{2,}"]
 DOC_ID_REGEX = r'curid=(\d+)'
 
-STOP_WORDS = ['be', 'the', 'of', 'a', 'in', 'and', 'to', 'as', 'for', 'from', 'on', 'have', 'it', 'with', 'by', 'one', 'he', 'at', 'an', 'during', 'who', 'his', 'also', 'that', 'this', 'which', 'after', 'between', 'its', 'their', 'but', 'until', 'or', 'into', 'over', 'then', 'up']
+STOP_WORDS = set(['be', 'the', 'of', 'a', 'in', 'and', 'to', 'as', 'for', 'from', 'on', 'have', 'it', 'with', 'by', 'one', 'he', 'at', 'an', 'during', 'who', 'his', 'also', 'that', 'this', 'which', 'after', 'between', 'its', 'their', 'but', 'until', 'or', 'into', 'over', 'then', 'up'])
 
 prev = ''
 
 start = time.time()
 end = time.time()
 
-vocab = {}
+vocab = set()
 v = {} # placeholder dictionary
 d = '' # placeholder string
 
@@ -87,10 +87,10 @@ def read_chunks(file, c = CHUNK_SIZE):
 def process(words):
     """
     :param words: String - a line of text
-    :return:
+    :return: dict 'term': {docID: tf}
     """
     d = get_docID(words)
-    clean(words)
+    return map_text(d, clean(words))
 
 def get_docID(t):
     """
@@ -102,36 +102,46 @@ def get_docID(t):
 
 def map_text(docID, doc):
     """
+    Also updates universal vocabulary
     :param docID: String
     :param doc: String of words
     :return: dict 'term': {docID: count of word in doc}
     """
     v = {} # reset placeholder dict
     for word in doc.split():
-        if word not in v:
-            v[word] = {docID: 1}
-        else:
-            v[word][docID] += 1
+        if word not in vocab:
+            vocab.add(word)
+        if word not in STOP_WORDS:
+            if word not in v:
+                v[word] = {docID: 1}
+            else:
+                v[word][docID] += 1
     return v
 
 def clean(words):
     return lemmatize(replace_regex(words)) # spaCy lemmatizer also takes care of lowercasing when it makes sense
 
 def replace_regex(text, l = REMOVE_REGEX, r = ' '):
+    """
+    :param text: String
+    :param l: list of regex for replacing (note that last has to replace multiple consecutive spaces)
+    :param r: replace with one space
+    :return: String all replaced
+    """
     for find in REMOVE_REGEX:
         text = re.sub(find, r, text)
     return text
 
 def lemmatize(text):
+    """
+    Differs from Checkpoint 1's since this goes line by line
+    :param text: String
+    :return: String lemmatized (and lowercase where appropriate)
+    """
     doc = nlp(text)
     with nlp.select_pipes(disable=['parser','ner']):
         l_text = ' '.join([token.lemma_ for token in doc])
     return l_text
-
-# lowercase, then lemmatize each word
-# check if word is already in vocab
-# ignore if stop word
-# put into dictionary of doc-id, tf
 
 # Reduce
 
