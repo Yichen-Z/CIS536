@@ -50,6 +50,7 @@ def sample_text(filepath):
         sample = input.readlines()
         output.writelines(sample[0:ROWS])
 
+# deprecated
 def change_to_lowercase(filepath):
     with open(filepath, 'r+') as input:
         file = input.read()

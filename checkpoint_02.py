@@ -56,9 +56,10 @@ chunk_index = {}
 nlp = spacy.load('en_core_web_sm')
 
 # File input
-def do_everything():
-    for f in inputs: # each file to process
-        reduce_list(read_file(f))
+def do_everything(folder = inputs):
+    temp_list = []
+    for f in folder: # each file to process
+        temp_list = read_file(f)
 
 # Map
 def read_file(fpath):

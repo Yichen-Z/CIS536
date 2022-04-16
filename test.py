@@ -1,6 +1,7 @@
 import checkpoint_02 as c
 import os
 import time
+import checkpoint2
 
 big_files = [r'D:\cis_536\wikidata\wikidata.000039', r'D:\cis_536\wikidata\wikidata.000009']
 small_files = r'D:\cis_536\wikidata_small'
@@ -18,7 +19,7 @@ small_files = r'D:\cis_536\wikidata_small'
 # print(c.map_text(i,w))
 # # output: {'sunshine': {'1403': 3}, 'grace': {'1403': 1}, 'world': {'1403': 1}, 'today': {'1403': 2}}
 
-# # test get_docID
+# test get_docID
 # w = 'dlafalsdkjfcurid=133 the world is great'
 # print(c.get_docID(w))
 
@@ -33,12 +34,27 @@ small_files = r'D:\cis_536\wikidata_small'
 # print(f'cleaning text done in {end - start}')
 
 # test everything so far
-def end_to_end():
-    for file in os.listdir(small_files):
 
-start = time.time()
-print(c.vocab)
-c.read_file(file)
-print(c.vocab)
-end = time.time()
-print(f'Cleaning and ignoring stop words takes {end - start} sec')
+## Stage 1: One small file
+
+
+# start = time.time()
+# c.write_vocab('tiny_vocabulary.txt')
+# end = time.time()
+# print(f'Tiny vocabulary writes to file in {end - start} secs')
+
+# start = time.time()
+# c.write_index(raw, 'tiny_inverted_index.txt')
+# end = time.time()
+# print(f'Tiny inverted index writes in {end - start} secs')
+
+## Stage 2: Multiple small files
+# def end_to_end():
+#     for file in os.listdir(small_files):
+
+# start = time.time()
+# print(c.vocab)
+# c.read_file(file)
+# print(c.vocab)
+# end = time.time()
+# print(f'Cleaning and ignoring stop words takes {end - start} sec')

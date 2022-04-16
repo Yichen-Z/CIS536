@@ -3,7 +3,7 @@ Yichen Zhang
 CIS 536
 Spring 2022
 
-To run the script file checkpoint_01.py:
+To run the script file main.py:
     0) Download and install a compatible IDE. Some examples are listed below.
         Visual Studio Code: https://code.visualstudio.com/
         PyCharm: https://www.jetbrains.com/pycharm/
@@ -40,25 +40,9 @@ To run the script file checkpoint_01.py:
     4) Install spaCy language model via terminal:
         python -m spacy download en_core_web_sm
 
-    5) To sample or not:
-        To run the script on the first n lines of the original text file
-            a) Line 31, set ROWS = n
-            b) Ensure line 170's sample_text(FILEPATH) is NOT commented out - ensure it will run
-        To run the script on the entire original file
-            a) Line 32, set SAMPLE_FILE to the path of a copy of the original text file
-            b) Ensure line 170's sample_text(FILEPATH) will NOT run - comment it out
-    
-    6) Double check:
-        Ensure the following will run (NOT commented out)
-            Line 175: change_to_lowercase(SAMPLE_FILE)
-            Line 176: regex_replace()
-            Line 179: lemmatize_file()
-            Line 184: make_corpus_dictionary()
-            Line 185: build_unigram()
-
 Checkpoint 2 Scope
 - Multiple txt files
-- 
+- "Localized" inverted indices
 
 Outputs
 - dictionary.txt
@@ -77,7 +61,6 @@ Outputs
 
 Observations:
     Running read_chunks() on one of the files without any processing of the text:
-        Lemmatization time:  3.898629903793335
         Testing read_chunks takes 0.781052827835083 sec
         However, ultimately this seems to hang the regex and lemmatizer
         # Read in chunks of 100 MB - slow/hanging
@@ -101,3 +84,23 @@ Observations:
         #                 # this is a complete line and can be processed as usual
         #                 print(process(text))
     Changed to reading line by line instead with read_file
+        New issue: spaCy lemmatizer nlp pipeline is now much slower even on a smaller text file compared to Checkpoint 1
+            Lemmatization time:  3.898629903793335
+            Next iteration needs to return to chunking so spaCy can process as much of the text as possible
+
+To run the script file checkpoint_01.py: (continued from instructions for main.py)
+    5) To sample or not:
+        To run the script on the first n lines of the original text file
+            a) Line 31, set ROWS = n
+            b) Ensure line 170's sample_text(FILEPATH) is NOT commented out - ensure it will run
+        To run the script on the entire original file
+            a) Line 32, set SAMPLE_FILE to the path of a copy of the original text file
+            b) Ensure line 170's sample_text(FILEPATH) will NOT run - comment it out
+    
+    6) Double check:
+        Ensure the following will run (NOT commented out)
+            Line 175: change_to_lowercase(SAMPLE_FILE)
+            Line 176: regex_replace()
+            Line 179: lemmatize_file()
+            Line 184: make_corpus_dictionary()
+            Line 185: build_unigram()
