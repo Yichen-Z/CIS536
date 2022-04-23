@@ -8,12 +8,7 @@ To run the script file main.py:
         Visual Studio Code: https://code.visualstudio.com/
         PyCharm: https://www.jetbrains.com/pycharm/
     
-    1) HOME & FILE paths:
-        a) Create a directory. Place the Wikipedia text files you wish to use in it.
-        b) Update HOME variable on line 28 to this directory's path.
-        c) Update the string in FILE on line 29 to the name of the text file
-    
-    2) Script directory:
+    1) Script directory:
         a) Create another directory, either nested within or independent of the directory above
         b) Move the .py script to this directory
             Or fork from https://github.com/Yichen-Z/CIS536
@@ -23,6 +18,10 @@ To run the script file main.py:
                     python -m venv new_venv
             VS Code will have a pop-up window that helps automatically activate this venv
             (This should automatically install pip)
+    
+    2) In main.py
+        a) Update line 9's RAW_FILES to be the directory where the raw wikipedia files are
+        b) Update line 10's CLEANED_FILES to be the directory where the cleaned and separated text files should go
  
     3) Install packages via terminal from directory where script is:
         To use Pipreqs:
@@ -43,21 +42,6 @@ To run the script file main.py:
 Checkpoint 2 Scope
 - Multiple txt files
 - "Localized" inverted indices
-
-Outputs
-- dictionary.txt
-    list of all stemmed words, one per line
-    alphabetical
-    word-code starts with 0
-- one local inverted index per chunk in the dataset
-    ignore stop words identified in checkpoint 1
-    word-code word doc-freq (doc-id, tf) (doc-id, tf) ...
-    in ascending word-code order
-    submit only 2 of these
-- any other stats that would be useful for search engine
-    document lengths
-    corpus document count
-- this readme
 
 Observations:
     Running read_chunks() on one of the files without any processing of the text:
@@ -87,7 +71,16 @@ Observations:
         New issue: spaCy lemmatizer nlp pipeline is now much slower even on a smaller text file compared to Checkpoint 1
             Lemmatization time:  3.898629903793335
             Next iteration needs to return to chunking so spaCy can process as much of the text as possible
+    Next approach:
+        Break apart the big files and clean them at the same time
+        Problem not solved: takes a very long time
+        On the plus side, if the separation and cleaning ever get done, the actual dictionary and index construction do not take as long
+    Still need to improve:
+        Considerably speed up the reformatting and lemmatization of the raw files - impossible to do at this point at scale
+        Separate the creation of the vocabulary from the creation of the inverted indices
+            Kind of a chicken-and-egg problem, as the inverted indices still need the term ID, which can only be determined once the entire vocabulary is complete
 
+From Checkpoint 1:
 To run the script file checkpoint_01.py: (continued from instructions for main.py)
     5) To sample or not:
         To run the script on the first n lines of the original text file
