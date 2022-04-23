@@ -104,7 +104,7 @@ def map_text(docID, doc):
     return v
 
 def clean(words):
-    return lemmatize(replace_regex(words)) # spaCy lemmatizer also takes care of lowercasing when it makes sense
+    return replace_regex(lemmatize(words)) # spaCy lemmatizer also takes care of lowercasing when it makes sense
 
 def replace_regex(text, r = ' '):
     """

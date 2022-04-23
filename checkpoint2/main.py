@@ -29,7 +29,7 @@ raw_list_by_doc = [] # list of dictionaries by document
 
 # If not combined and compiled, RegEx will jam with large files
 STOP_WORDS = ['be', 'the', 'of', 'a', 'in', 'and', 'to', 'as', 'for', 'from', 'on', 'have', 'it', 'with', 'by', 'one', 'he', 'at', 'an', 'during', 'who', 'his', 'also', 'that', 'this', 'which', 'after', 'between', 'its', 'their', 'but', 'until', 'or', 'into', 'over', 'then', 'up']
-REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"'[a-z]+", r"[^\s\w]", "_"]
+REMOVE_REGEX = [r"https:\/\/[^\s]+\s", r"^\n", r"^\r\n", r"'[a-z]+", r"[^\s\w]", "_"]
 remove_stops = re.compile(r"(" + '|'.join(STOP_WORDS) + r")")
 pattern = re.compile(r"(" + '|'.join(REMOVE_REGEX) + r")")
 spaces = re.compile(r"[ \t]{2,}")

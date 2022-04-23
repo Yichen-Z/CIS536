@@ -1,10 +1,13 @@
+from regex import R
 import checkpoint_02 as c
 import os
 import time
-import checkpoint2
 
 big_files = [r'D:\cis_536\wikidata\wikidata.000039', r'D:\cis_536\wikidata\wikidata.000009']
 small_files = r'D:\cis_536\wikidata_small'
+big_file = r'D:\cis_536\wikidata\wikidata.000000'
+output_folder = r'C:\Users\house\workspace\outputs'
+tiny_file = r'D:\cis_536\wikidata_small_test\tiny.txt'
 
 # # Test chunk reading - hangs with spaCy
 # start = time.time()
@@ -24,14 +27,14 @@ small_files = r'D:\cis_536\wikidata_small'
 # print(c.get_docID(w))
 
 # # test replace_regex
-# w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the wonders are The Wonders'
+w = r'https://en.wikipedia.org/wiki?curid=858197 Astra ( 1954 automobile ) the wonders are The Wonders'
 # print(c.replace_regex(w))
 
-# # test clean()
-# start = time.time()
-# print(c.clean(w))
-# end = time.time()
-# print(f'cleaning text done in {end - start}')
+# test clean()
+start = time.time()
+print(c.clean(w))
+end = time.time()
+print(f'cleaning text done in {end - start}')
 
 # test everything so far
 
