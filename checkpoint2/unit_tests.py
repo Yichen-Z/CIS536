@@ -1,12 +1,12 @@
 import navigate as nav
 import mk_dict as m
 
+# Now let's go for the whole deal - clean and rewrite every email
+nav.navigate(nav.HOME)
+
 # Create inverted index from sample of emails
 # set HOME = r'C:\Users\house\Desktop\test'
 m.make_index()
-
-# Now let's go for the whole deal - clean and rewrite every email
-# nav.navigate(nav.HOME)
 
 # # test process for rewriting nested folder
 # read = r'D:\cis_536\maildir\shackleton-s' # wow this person had folders

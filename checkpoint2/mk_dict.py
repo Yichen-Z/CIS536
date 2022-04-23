@@ -4,7 +4,6 @@ Map each document out to <doc-id> and word freq
 import os
 
 HOME = r'C:\Users\house\workspace\email_outputs\with_punct'
-# HOME = r'C:\Users\house\Desktop\test'
 
 punct_set = {'.', ',', '?', '!', r'~', r'`', r'#', r'$', r'%', r'^', r'&', r'*', r'(', r')', r'-', r'_', r'+', r'=', r'[', r']', r'{', r'}', r':', r';', r'"', r"'", r'<', r'>', r'|', r'\\', r'/'}
 
