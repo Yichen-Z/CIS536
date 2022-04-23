@@ -31,7 +31,6 @@ def navigate(path):
             navigate(item_path)
         else:
             # do something with the file
-            print(item)
             item = os.path.join(path, item)
             try:
                 process(item)
